@@ -6,4 +6,4 @@ const eventSchema = new mongoose.Schema({
   time: { type: Date, required: true },
 });
 
-module.exports = mongoose.model('Event', eventSchema);
+module.exports = mongoose.model('Blogs', eventSchema);
