@@ -24,6 +24,15 @@ module.exports = {
       res.status(500).json({ message: 'Error fetching blogs' });
     }
   },
+  async getBlogsDetail(req,res){
+    try {
+      const blogId = req.params.id;
+      const blogs = await Blogs.findById(blogId);
+      res.status(200).json(blogs);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching blogs detail' });
+    }
+  },
   async updateBlog(req, res) {
     try {
       const blogId = req.params.id;
