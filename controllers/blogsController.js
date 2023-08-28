@@ -1,14 +1,16 @@
 const Blogs = require('../models/Blogs');
+const { ObjectId } = require("mongoose").Types;
+
 
 module.exports = {
   async createBlog(req, res) {
     try {
       const { title, description, time } = req.body;
-      if (req.user.role !== 'admin' || 'super admin') {
+      if (req.user.role !== 'admin' && req.user.role !== 'super admin') {
         return res.status(403).json({ message: 'Permission denied' });
       }
       // Create a new event
-      const newBlog = new Blogs({ title, description, time });
+      const newBlog = new Blogs({ title, description, time,authorId:req.user.id });
       await newBlog.save();
 
       res.status(201).json({ message: 'Blog created successfully' });
@@ -28,8 +30,8 @@ module.exports = {
     try {
       const blogId = req.params.id;
       const { title, description, time } = req.body;
-
-      if (req.user.role !== 'admin') {
+      const blogfind = await Blogs.findById(blogId);
+      if (req.user.role !== 'admin' && !req.user._id.equals(blogfind.authorId)) {
         return res.status(403).json({ message: 'Permission denied' });
       }
 
@@ -51,8 +53,9 @@ module.exports = {
   async deleteBlog(req, res) {
     try {
       const blogId = req.params.id;
+      const blogfind = await Blogs.findById(blogId);
 
-      if (req.user.role !== 'admin') {
+      if (req.user.role !== 'admin' && !req.user._id.equals(blogfind.authorId)) {
         return res.status(403).json({ message: 'Permission denied' });
       }
 
