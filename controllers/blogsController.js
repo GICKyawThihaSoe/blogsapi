@@ -1,6 +1,4 @@
 const Blogs = require('../models/Blogs');
-const { ObjectId } = require("mongoose").Types;
-
 
 module.exports = {
   async createBlog(req, res) {
